@@ -1,17 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
+use App\Http\Controllers\VehiculoController;
 
+// Al entrar al sistema, ir directamente al listado de vehículos dentro
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
-})->name('home');
+    return redirect()->route('vehiculos.index');
+});
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Ruta para ver el histórico de vehículos que ya salieron
+Route::get('vehiculos/historial', [VehiculoController::class, 'historial'])
+    ->name('vehiculos.historial');
 
-require __DIR__.'/settings.php';
+// Rutas CRUD del recurso Vehiculo
+Route::resource('vehiculos', VehiculoController::class);
